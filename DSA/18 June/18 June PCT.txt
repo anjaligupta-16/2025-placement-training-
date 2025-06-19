@@ -1,0 +1,75 @@
+Answer 1: Two sums 
+
+class Solution {
+public:
+    vector<int> twoSum(vector<int>& nums, int target) {
+    unordered_map<int, int> mp;
+    for (int i = 0; i < nums.size(); i++) {
+        int complement = target - nums[i];
+        if (mp.find(complement) != mp.end()) {
+            return {mp[complement], i};
+        }
+        mp[nums[i]] = i;
+    }
+    return {};
+}
+};
+
+
+Answer 2: Alone in couples
+
+class Solution {
+  public:
+    int findSingle(vector<int> &arr) {
+        int result = 0; 
+        
+        for (int num: arr){
+            result = result ^ num ;
+        }
+        
+        return result;
+    }
+};
+
+Answer 3 : Best time to buy and sell stocks
+
+class Solution {
+public:
+    int maxProfit(vector<int>& prices) {
+        int min = INT_MAX;
+        int max_profit = 0;
+    
+        for (int price : prices){
+            if(price < min){
+                min = price ;
+            }
+            else{
+                max_profit = max(max_profit , price - min);
+            }
+        }
+        return max_profit;
+    }
+};
+
+Answer 4 : sort colours 
+
+class Solution {
+public:
+    void sortColors(vector<int>& nums) {
+        int low = 0, mid = 0, high = nums.size() - 1;
+
+        while (mid <= high) {
+            if (nums[mid] == 0) {
+                swap(nums[low], nums[mid]);
+                low++;
+                mid++;
+            } else if (nums[mid] == 1) {
+                mid++;
+            } else { // nums[mid] == 2
+                swap(nums[mid], nums[high]);
+                high--;
+                // do not increment mid here
+            }
+        }
+    }
+};
