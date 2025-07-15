@@ -1,0 +1,75 @@
+19 June PCT
+
+1.
+class Solution {
+public:
+    int findJudge(int N, vector<vector<int>>& trust) {
+        vector<int> count(N + 1, 0);
+        for (auto& t : trust)
+            count[t[0]]--, count[t[1]]++;
+        for (int i = 1; i <= N; ++i) {
+            if (count[i] == N - 1) return i;
+        }
+        return -1;
+    }
+        
+};
+
+2.
+class Solution {
+public:
+    vector<int> plusOne(vector<int>& digits) {
+        int n = digits.size();
+
+        
+        for (int i = n - 1; i >= 0; i--) {
+            if (digits[i] < 9) {
+                digits[i]++;
+                return digits;
+            }
+            digits[i] = 0;
+        }
+        digits.insert(digits.begin(), 1);
+        return digits;
+    }
+};
+
+3.
+class Solution {
+public:
+    int maxSubArray(vector<int>& nums) {
+        int curr_sum = 0 , max_sum = INT_MIN;
+        
+        for ( int num : nums){
+            curr_sum += num;
+            max_sum = max(curr_sum , max_sum);
+
+            if(curr_sum < 0){
+                curr_sum = 0;
+            }
+        }
+    
+        return max_sum;
+    }
+};
+
+4.
+class Solution {
+public:
+    int findContentChildren(vector<int>& g, vector<int>& s) {
+        sort(g.begin(), g.end());  // Sort greed
+        sort(s.begin(), s.end());  // Sort sizes
+
+        int child = 0, cookie = 0;
+
+               while (child < g.size() && cookie < s.size()) {
+            if (s[cookie] >= g[child]) {
+                child++;  
+            }
+            cookie++;          
+		}
+
+        return child;
+    }
+};
+
