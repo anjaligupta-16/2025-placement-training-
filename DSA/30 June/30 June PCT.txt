@@ -1,0 +1,104 @@
+30 June PCT
+
+1. 
+#include<iostream>
+#include<vector>
+using namespace std;
+
+class Stack{
+    vector<int> v;
+
+public:
+    void push(int val){
+        v.push_back(val);
+    }
+
+    void pop(){
+        if(v.size() != 0){
+            v.pop_back();
+        }    
+        else{
+            cout<<"The stack is empty!"<<endl;
+        }
+    }
+
+    int top(){
+        if(v.size() != 0){
+            return v[v.size() - 1];
+        }    
+        else{
+            cout<<"The stack is empty!"<<endl;
+            return -1;
+        }
+    }
+
+    int peep(int idx){
+        if(idx >= v.size() || idx < 0){
+            cout<<"Error! index out of bound."<<endl;
+            return -1;
+        }
+        else{
+            return v[idx];
+        }
+    }
+};
+
+int main(){
+    Stack s;
+
+    s.push(10);
+    s.push(20);
+    s.push(30);
+
+    cout<< s.top()<<endl;
+
+    s.pop();
+
+    cout<< s.top()<<endl;
+
+    cout<< s.peep(2)<<endl;
+}
+
+2. 
+class Solution {
+public:
+    bool isValid(string s) {
+        stack<char> st;
+        for( auto it: s){
+            if(it=='('  || it=='{' || it=='[') st.push(it);
+            else{
+                if(st.size()==0) return false;
+                char ch= st.top();
+                st.pop();
+                if( (it == ')' && ch=='(') || (it == '}' && ch=='{') || (it == ']' && ch=='[')) continue;
+                else return false;
+                
+            }
+        }
+    return st.empty();
+    }
+};
+
+3.
+class Solution {
+public:
+    ListNode* swapNodes(ListNode* head, int k) {
+        ListNode* first = head;
+       
+        for (int i = 1; i < k; i++) {
+            first = first->next;
+        }
+
+        ListNode* temp = first;
+        ListNode* second = head;
+
+        while (temp->next) {
+            temp = temp->next;
+            second = second->next;
+        }
+
+        swap(first->val, second->val);
+
+        return head;
+    }
+};

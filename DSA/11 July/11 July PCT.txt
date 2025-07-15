@@ -1,0 +1,103 @@
+11 July PCT
+
+1.
+class Solution {
+public:
+    vector<vector<string>> res;
+
+    bool isPalindrome(string& s, int start, int end) {
+        while (start < end)
+            if (s[start++] != s[end--]) return false;
+        return true;
+    }
+
+    void backtrack(int start, string& s, vector<string>& path) {
+        if (start == s.size()) {
+            res.push_back(path);
+            return;
+        }
+
+        for (int end = start; end < s.size(); ++end) {
+            if (isPalindrome(s, start, end)) {
+                path.push_back(s.substr(start, end - start + 1));
+                backtrack(end + 1, s, path);
+                path.pop_back();
+            }
+        }
+    }
+
+    vector<vector<string>> partition(string s) {
+        vector<string> path;
+        backtrack(0, s, path);
+        return res;
+    }
+};
+
+
+2.
+class Solution {
+public:
+    int res = INT_MAX;
+
+    void backtrack(vector<int>& cookies, int i, vector<int>& dist, int k) {
+        if (i == cookies.size()) {
+            int unfairness = *max_element(dist.begin(), dist.end());
+            res = min(res, unfairness);
+            return;
+        }
+
+        for (int j = 0; j < k; ++j) {
+            dist[j] += cookies[i];
+            // prune: skip if already worse
+            if (dist[j] < res)
+                backtrack(cookies, i + 1, dist, k);
+            dist[j] -= cookies[i];
+            if (dist[j] == 0) break; // prune identical distributions
+        }
+    }
+
+    int distributeCookies(vector<int>& cookies, int k) {
+        vector<int> dist(k, 0);
+        backtrack(cookies, 0, dist, k);
+        return res;
+    }
+};
+
+
+3.
+class Solution {
+public:
+    vector<vector<string>> res;
+
+    void backtrack(int row, int n, vector<string>& board,
+                   unordered_set<int>& cols, unordered_set<int>& diag1, unordered_set<int>& diag2) {
+        if (row == n) {
+            res.push_back(board);
+            return;
+        }
+
+        for (int col = 0; col < n; ++col) {
+            if (cols.count(col) || diag1.count(row - col) || diag2.count(row + col)) continue;
+
+            board[row][col] = 'Q';
+            cols.insert(col);
+            diag1.insert(row - col);
+            diag2.insert(row + col);
+
+            backtrack(row + 1, n, board, cols, diag1, diag2);
+
+            board[row][col] = '.';
+            cols.erase(col);
+            diag1.erase(row - col);
+            diag2.erase(row + col);
+        }
+    }
+
+    vector<vector<string>> solveNQueens(int n) {
+        vector<string> board(n, string(n, '.'));
+        unordered_set<int> cols, diag1, diag2;
+        backtrack(0, n, board, cols, diag1, diag2);
+        return res;
+    }
+};
+

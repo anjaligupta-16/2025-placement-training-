@@ -1,0 +1,165 @@
+24 June PCT
+
+1.
+#include <iostream>
+using namespace std;
+
+//node pointer
+
+class Node{
+    public:
+        int data;
+        Node* next;
+
+        Node(int val){
+            data = val;
+            next = NULL;
+        }
+};
+
+class ll{
+    Node* head;
+
+    public:
+        ll(){
+            head = NULL;
+        }
+
+        //Insert at beginning :
+        void insertatbeginning(int key){
+            Node* newnode = new Node(key);
+            newnode->next = head ;
+            head = newnode; 
+        }
+
+        //Insert at end :
+        void insertatend(int key){
+            Node* newnode = new Node(key);
+
+            if(head==NULL){
+                insertatbeginning(key);
+            }
+            else{
+                Node* temp = head;
+                while(temp->next != NULL){
+                    temp = temp->next;
+                }
+                temp->next = newnode ;
+                
+            }
+        }
+
+        //Insert at index:
+        void insertatindex(int index , int val){
+            if (index == 0) {
+                insertatbeginning(val);
+                return;
+            }
+
+            Node* temp = head;
+            for (int i = 0; temp!=NULL && i < index - 1; i++) {
+                temp = temp->next;
+            }
+
+            if (temp==NULL) return; // index out of bounds
+
+            Node* newNode = new Node(val);
+            newNode->next = temp->next;
+            temp->next = newNode;
+        }
+        
+
+        //Delete at beginning:
+        void deleteatbeginning(){
+            Node* temp = head ;
+            head = temp->next ;
+            delete temp;
+        }
+
+        //Delete at end:
+        void deleteatend(){
+            if (!head) return;
+
+            if (!head->next) {
+                delete head;
+                head = NULL;
+                return;
+            }
+
+            Node* temp = head;
+            while(temp->next->next != NULL){
+                temp= temp->next;
+            }
+            delete temp->next;
+            temp->next=NULL;
+        }
+
+        //print linkedlist:
+        void printll(){
+            Node* temp = head;
+            while(temp !=NULL){
+                cout<<temp->data<<"->";
+                temp=temp->next;
+            }
+            cout<<"NULL";
+        }
+};
+
+int main(){
+    ll a;
+
+    a.insertatend(2);
+    a.insertatend(3);
+    a.insertatbeginning(1);
+    
+    a.deleteatend();
+    a.deleteatbeginning();
+    a.printll();
+
+}
+
+2.
+class Solution {
+  public:
+    /* Function to delete a node from a linked list */
+    Node* deleteNode(Node* head, int x) {
+        //Delete the first node
+        
+        if(x==1){
+            Node* temp = head;
+            head = head->next;
+            delete temp;
+            return head;
+        }
+        
+        Node* current = head;
+        for(int i = 1 ; i<x-1 && current != NULL ; i++){
+            current = current->next;
+        }
+        
+         // If position is out of bounds
+        if (current == NULL || current->next == NULL) {
+            return head;
+        }
+        
+        Node* temp = current->next ;
+        current->next = current->next->next;
+        delete temp;
+        
+        return head;
+    }
+};
+
+3.
+class Solution {
+public:
+    ListNode* middleNode(ListNode* head) {
+        ListNode* slow = head; 
+        ListNode* fast = head;
+        while(fast!=NULL && fast->next != NULL){
+            fast = fast->next->next;
+            slow = slow->next;
+        }
+    return slow; 
+    }
+};

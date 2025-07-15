@@ -1,0 +1,108 @@
+2 July PCT
+
+1. 
+class MyStack {
+public:
+    MyStack() {
+        
+    }
+    queue<int> q;
+    void push(int x) {
+        
+        int s= q.size();
+        q.push(x);
+        for(int i=0; i<s; i++){
+            q.push(q.front());
+            q.pop();
+        }
+    }
+    
+    int pop() {
+        int n = q.front();
+        q.pop();
+        return n;
+    }
+    
+    int top() {
+        return q.front();
+    }
+    
+    bool empty() {
+        if (q.size()==0){
+            return true;
+        }
+        else
+            return false;
+    }
+};
+
+2. 
+class MyQueue {
+public:
+    MyQueue() {
+        
+    }
+    stack <int> st1, st2;
+    void push(int x) {
+        while(!st1.empty()){
+            st2.push(st1.top());
+            st1.pop();
+        }
+
+        st1.push(x);
+
+        while(!st2.empty()){
+            st1.push(st2.top());
+            st2.pop();
+        }
+    }
+    
+    int pop() {
+        if (st1.empty()) {
+            cout << "Stack is empty";
+            exit(0);}
+        int n = st1.top();
+        st1.pop();
+        return n;
+    }
+    
+    int peek() {
+        if (st1.empty()) {
+            cout << "Stack is empty";
+            exit(0);}
+        return st1.top();
+    }
+    
+    bool empty() {
+        if(st1.empty()){
+            return true;
+        }
+        else
+            return false;
+    }
+};
+
+3.
+class Solution {
+public:
+    int evalRPN(vector<string>& tokens) {
+    stack<long> st;
+    unordered_map<string, function<long(long,long)>> op {
+        {"+", plus<long>()},
+        {"-", minus<long>()},
+        {"*", multiplies<long>()},
+        {"/", divides<long>()}
+    };
+
+    for (auto& token : tokens) {
+        if (op.count(token)) {
+            long b = st.top(); st.pop();
+            long a = st.top(); st.pop();
+            st.push(op[token](a, b));
+        } else {
+            st.push(stol(token));
+        }
+    }
+    return st.top();
+}
+};

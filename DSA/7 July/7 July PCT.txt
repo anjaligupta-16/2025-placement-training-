@@ -1,0 +1,86 @@
+7 July PCT
+
+1.
+class Solution {
+public:
+    vector<string> result;
+    unordered_map<char, string> phone = {
+        {'2', "abc"}, {'3', "def"},
+        {'4', "ghi"}, {'5', "jkl"}, {'6', "mno"},
+        {'7', "pqrs"}, {'8', "tuv"}, {'9', "wxyz"}
+    };
+
+    void backtrack(string& digits, int index, string& current) {
+        if (index == digits.size()) {
+            result.push_back(current);
+            return;
+        }
+
+        string letters = phone[digits[index]];
+        for (char ch : letters) {
+            current.push_back(ch);
+            backtrack(digits, index + 1, current);
+            current.pop_back();  // backtrack
+        }
+    }
+
+    vector<string> letterCombinations(string digits) {
+        if (digits.empty()) return {};
+        string current;
+        backtrack(digits, 0, current);
+        return result;
+    }
+};
+
+
+2.
+class Solution {
+public:
+    vector<vector<int>> result;
+
+    void backtrack(vector<int>& candidates, int target, int index, vector<int>& current) {
+        if (target == 0) {
+            result.push_back(current);
+            return;
+        }
+
+        for (int i = index; i < candidates.size(); i++) {
+            if (candidates[i] <= target) {
+                current.push_back(candidates[i]);
+                backtrack(candidates, target - candidates[i], i, current); 
+                current.pop_back(); // backtrack
+            }
+        }
+    }
+
+    vector<vector<int>> combinationSum(vector<int>& candidates, int target) {
+        vector<int> current;
+        backtrack(candidates, target, 0, current);
+        return result;
+    }
+};
+
+
+3.
+class Solution {
+public:
+    vector<vector<int>> result;
+
+    void backtrack(vector<int>& nums, int start) {
+        if (start == nums.size()) {
+            result.push_back(nums);
+            return;
+        }
+
+        for (int i = start; i < nums.size(); i++) {
+            swap(nums[start], nums[i]);            
+            backtrack(nums, start + 1);            
+            swap(nums[start], nums[i]);           
+        }
+    }
+
+    vector<vector<int>> permute(vector<int>& nums) {
+        backtrack(nums, 0);
+        return result;
+    }
+};
