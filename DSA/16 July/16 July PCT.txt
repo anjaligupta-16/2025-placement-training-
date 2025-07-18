@@ -1,0 +1,95 @@
+16 July PCT
+
+1.Binary tree right side view
+class Solution {
+public:
+    vector<int> rightSideView(TreeNode* root) {
+        vector<int> result;
+        if (!root) return result;
+
+        queue<TreeNode*> q;
+        q.push(root);
+
+        while (!q.empty()) {
+            int levelSize = q.size();
+            TreeNode* current;
+
+            for (int i = 0; i < levelSize; i++) {
+                current = q.front();
+                q.pop();
+
+                if (current->left) q.push(current->left);
+                if (current->right) q.push(current->right);
+            }
+            result.push_back(current->val); // last node at this level
+        }
+
+        return result;
+    }
+};
+
+
+2. Path Sum II
+class Solution {
+public:
+    void dfs(TreeNode* root, int targetSum, vector<int>& path, vector<vector<int>>& result) {
+        if (!root) return;
+
+        path.push_back(root->val);
+        targetSum -= root->val;
+
+        if (!root->left && !root->right && targetSum == 0) {
+            result.push_back(path);
+        }
+
+        dfs(root->left, targetSum, path, result);
+        dfs(root->right, targetSum, path, result);
+
+        path.pop_back();
+    }
+
+    vector<vector<int>> pathSum(TreeNode* root, int targetSum) {
+        vector<vector<int>> result;
+        vector<int> path;
+        dfs(root, targetSum, path, result);
+        return result;
+    }
+};
+
+
+3. Lowest Common Ancestor in a Binary Tree.
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (!root || root == p || root == q) return root;
+
+        TreeNode* left = lowestCommonAncestor(root->left, p, q);
+        TreeNode* right = lowestCommonAncestor(root->right, p, q);
+
+        if (left && right) return root;
+        return left ? left : right;
+    }
+};
+
+4.Kth smallest element in a BST
+class Solution {
+public:
+    int kthSmallest(TreeNode* root, int k) {
+        stack<TreeNode*> st;
+        TreeNode* curr = root;
+
+        while (curr || !st.empty()) {
+            while (curr) {
+                st.push(curr);
+                curr = curr->left;
+            }
+
+            curr = st.top(); st.pop();
+            --k;
+            if (k == 0) return curr->val;
+            curr = curr->right;
+        }
+
+        return -1; // In case k is out of range
+    }
+};

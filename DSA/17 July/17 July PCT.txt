@@ -1,0 +1,97 @@
+17 July PCT
+
+1.class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        if (!root || root == p || root == q) return root;
+
+        TreeNode* left = lowestCommonAncestor(root->left, p, q);
+        TreeNode* right = lowestCommonAncestor(root->right, p, q);
+
+        if (left && right) return root;
+        return left ? left : right;
+    }
+};
+
+
+2.class Solution {
+public:
+    unordered_map<int, vector<int>> graph;
+    int maxTime = 0;
+
+    void buildGraph(TreeNode* root, TreeNode* parent) {
+        if (!root) return;
+        if (parent) {
+            graph[root->val].push_back(parent->val);
+            graph[parent->val].push_back(root->val);
+        }
+        buildGraph(root->left, root);
+        buildGraph(root->right, root);
+    }
+
+    void dfs(int node, unordered_set<int>& visited, int time) {
+        visited.insert(node);
+        maxTime = max(maxTime, time);
+        for (int neighbor : graph[node]) {
+            if (!visited.count(neighbor)) {
+                dfs(neighbor, visited, time + 1);
+            }
+        }
+    }
+
+    int amountOfTime(TreeNode* root, int start) {
+        buildGraph(root, nullptr);
+        unordered_set<int> visited;
+        dfs(start, visited, 0);
+        return maxTime;
+    }
+};
+
+
+3.class Solution {
+public:
+    int countNodes(TreeNode* root) {
+        if (!root) return 0;
+
+        int leftHeight = getLeftHeight(root);
+        int rightHeight = getRightHeight(root);
+
+        if (leftHeight == rightHeight)
+            return (1 << leftHeight) - 1;
+
+        return 1 + countNodes(root->left) + countNodes(root->right);
+    }
+
+    int getLeftHeight(TreeNode* node) {
+        int height = 0;
+        while (node) {
+            height++;
+            node = node->left;
+        }
+        return height;
+    }
+
+    int getRightHeight(TreeNode* node) {
+        int height = 0;
+        while (node) {
+            height++;
+            node = node->right;
+        }
+        return height;
+    }
+};
+
+
+4.class Solution {
+public:
+    bool isValidBST(TreeNode* root) {
+        return validate(root, LONG_MIN, LONG_MAX);
+    }
+
+    bool validate(TreeNode* node, long minVal, long maxVal) {
+        if (!node) return true;
+        if (node->val <= minVal || node->val >= maxVal) return false;
+        return validate(node->left, minVal, node->val) &&
+               validate(node->right, node->val, maxVal);
+    }
+};
